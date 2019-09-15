@@ -26,8 +26,25 @@ reset.addEventListener('click', function () {
     hour.value = "";
 });
 save.addEventListener('click', function () {
-    if(data.value=="" || date.value=="" || hour.value==""){
+    if (data.value == "" || date.value == "" || hour.value == "") {
         return alert("you did't fill in all the fields");
+    }
+    let d = new Date();
+    let year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    let day = d.getDate();
+    let gd = (date.value).split('/');
+    for (let i = 0; i < 3; i++) {
+        gd[i] = Number(gd[i]);
+        if (!gd[i]) {
+            return alert("you didn't write the right date");
+        }
+    }
+    if (gd[0] < 0 || gd[1] < 0 || gd[2] < 0) {
+        return alert("you didn't write the right date");
+    }
+    if (gd[0] > 31 || gd[1] > 12 || gd[2] < 2019) {
+        return alert("you didn't write the right date");
     }
     myBuild(data.value, date.value, hour.value);
     let obj = new MyObj(data.value, date.value, hour.value, mone);
