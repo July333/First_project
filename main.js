@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
     if (arr) {
         for (let i = 0; i < arr.length; i++) {
             item = arr[i];
-            myBuild(item.data, item.date, item.hour);
+            myBuild(item.data, item.date, item.hour,item.mone);
         }
     }
     else {
@@ -29,10 +29,11 @@ save.addEventListener('click', function () {
     if (data.value == "" || date.value == "" || hour.value == "") {
         return alert("you did't fill in all the fields");
     }
+    /*
     let d = new Date();
     let year = d.getFullYear();
     let month = d.getMonth() + 1;
-    let day = d.getDate();
+    let day = d.getDate();*/
     let gd = (date.value).split('/');
     for (let i = 0; i < 3; i++) {
         gd[i] = Number(gd[i]);
@@ -40,13 +41,29 @@ save.addEventListener('click', function () {
             return alert("you didn't write the right date");
         }
     }
-    if (gd[0] < 0 || gd[1] < 0 || gd[2] < 0) {
+    if (gd[0] <= 0 || gd[1] <= 0 || gd[2] <= 0) {
         return alert("you didn't write the right date");
     }
     if (gd[0] > 31 || gd[1] > 12 || gd[2] < 2019) {
         return alert("you didn't write the right date");
     }
-    myBuild(data.value, date.value, hour.value);
+    if (gd[0] > 31 || gd[1] > 12 || gd[2] < 2019) {
+        return alert("you didn't write the right date");
+    }
+    let td = (hour.value).split(':');
+    for (let i = 0; i < 2; i++) {
+        td[i] = Number(td[i]);
+        if (isNaN(td[i])) {
+            return alert("you didn't write the right time");
+        }
+    }
+    if (td[0] < 0 || td[1] < 0 ) {
+        return alert("you didn't write the right date");
+    }
+    if (td[0] > 23 || td[1] > 59 ) {
+        return alert("you didn't write the right date");
+    }
+    myBuild(data.value, date.value, hour.value, mone);
     let obj = new MyObj(data.value, date.value, hour.value, mone);
     mone++;
     arr.push(obj);
@@ -69,7 +86,7 @@ function myClose(p) {
     arr = temp;
     window.localStorage.setItem("myBase", JSON.stringify(arr));
 }
-function myBuild(myData, myDate, myHour) {
+function myBuild(myData, myDate, myHour, mone) {
     var myNode = document.createElement('div');
     myNode.className = 'note fade-in';
     myNode.dataset.moneEl = mone;
