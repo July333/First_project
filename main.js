@@ -8,21 +8,16 @@ var nodes = document.getElementById('nodes');
 var mone = 0;
 var arr = [];
 window.addEventListener('load', function () {
-    arr = window.localStorage.getItem('moneArr');
+    arr = JSON.parse(window.localStorage.getItem("myBase"));
     let item;
     if (arr) {
-        arr = arr.split(',');
         for (let i = 0; i < arr.length; i++) {
-            if (arr[i] != '-1') {
-                item = JSON.parse(window.localStorage.getItem(arr[i]));
-                myBuild(item.data, item.date, item.hour);
-            }
+            item = arr[i];
+            myBuild(item.data, item.date, item.hour);
         }
-        mone = arr.length;
     }
-    else{
-        arr=[];
-        window.localStorage.setItem('moneArr', arr);
+    else {
+        arr = [];
     }
 });
 reset.addEventListener('click', function () {
@@ -35,25 +30,27 @@ save.addEventListener('click', function () {
         return alert("you did't fill in all the fields");
     }
     myBuild(data.value, date.value, hour.value);
-    arr[mone] = mone;
-    window.localStorage.setItem('moneArr', arr);
-    console.log(nodes.childNodes[1]);
-    let obj = new MyObj(data.value, date.value, hour.value);
-    window.localStorage.setItem(mone, JSON.stringify(obj));
+    let obj = new MyObj(data.value, date.value, hour.value, mone);
     mone++;
+    arr.push(obj);
+    window.localStorage.setItem("myBase", JSON.stringify(arr));
 });
 /////////////////constructor
-function MyObj(data, date, hour) {
+function MyObj(data, date, hour, mone) {
     this.data = data;
     this.date = date;
     this.hour = hour;
+    this.mone = mone;
 }//////////////////functions
 function myClose(p) {
     let inx = p.parentElement;
-    arr[p.dataset.moneEl] = '-1';
-    window.localStorage.setItem('moneArr', arr);
-    window.localStorage.removeItem(p.dataset.moneEl);
+    arr = JSON.parse(window.localStorage.getItem("myBase"));
+    let temp = arr.filter(function (ele) {
+        return ele.mone != p.dataset.moneEl;
+    });
     inx.removeChild(p);
+    arr = temp;
+    window.localStorage.setItem("myBase", JSON.stringify(arr));
 }
 function myBuild(myData, myDate, myHour) {
     var myNode = document.createElement('div');
